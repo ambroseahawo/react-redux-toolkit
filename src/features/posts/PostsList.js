@@ -7,7 +7,7 @@ import ReactionButtons from "./ReactionButtons"
 
 const PostsList = () => {
   const dispatch = useDispatch()
-  
+
   const posts = useSelector(selectAllPosts)
   const postsStatus = useSelector(getPostsStatus)
   const error = useSelector(getPostsError)
@@ -16,7 +16,7 @@ const PostsList = () => {
     if (postsStatus === 'idle'){
       dispatch(fetchPosts)
     }
-  })
+  }, [postsStatus, dispatch])
 
   const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
