@@ -1,12 +1,12 @@
-import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit"
+import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import { sub } from 'date-fns';
 import axios from "axios";
-import { sub } from 'date-fns'
 
 const POSTS_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 const initialState = {
   posts: [],
-  status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed' - status options
+  status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
   error: null
 }
 
@@ -62,10 +62,10 @@ const postsSlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
-
-        let min = 1
+        // Adding date and reactions
+        let min = 1;
         const loadedPosts = action.payload.map(post => {
-          post.date = sub(new Date(), { minutes: min++ }).toISOString()
+          post.date = sub(new Date(), { minutes: min++ }).toISOString();
           post.reactions = {
             thumbsUp: 0,
             wow: 0,
@@ -73,10 +73,10 @@ const postsSlice = createSlice({
             rocket: 0,
             coffee: 0
           }
-          return post
-        })
+          return post;
+        });
 
-        // update fetched posts to the array
+        // Add any fetched posts to the array
         state.posts = state.posts.concat(loadedPosts)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
@@ -105,15 +105,15 @@ const postsSlice = createSlice({
           rocket: 0,
           eyes: 0
         }
-        // console.log(action.payload)
+        console.log(action.payload)
         state.posts.push(action.payload)
       })
   }
 })
 
-export const selectAllPosts = (state) => state.posts.posts
-export const getPostsStatus = (state) => state.posts.status
-export const getPostsError = (state) => state.posts.error
+export const selectAllPosts = (state) => state.posts.posts;
+export const getPostsStatus = (state) => state.posts.status;
+export const getPostsError = (state) => state.posts.error;
 
 export const { postAdded, reactionAdded } = postsSlice.actions
 
